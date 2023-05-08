@@ -24,9 +24,10 @@ RUN docker-php-ext-install exif
 RUN docker-php-ext-install pcntl
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install pgsql
-# RUN docker-php-ext-configure gd --with-gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-png=/usr/include/
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install pdo_pgsql 
 
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -61,7 +62,19 @@ RUN chown -R www:www /var/www
 # Change current user to www
 USER www
 
-RUN composer install
+RUN composer install --optimize-autoloader --no-dev
+
+RUN php artisan config:cache
+
+RUN php artisan route:cache
+
+RUN php artisan view:cache
+
+RUN php artisan optimize
+
+RUN php artisan storage:link
+# RUN touch .env
+RUN php artisan key:generate
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

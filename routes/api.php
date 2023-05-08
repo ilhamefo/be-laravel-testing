@@ -28,6 +28,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'authenticate']);
 
+Route::get('/', function(){
+    return response()->json([
+        "Hello" => "World"
+    ]);
+});
+
 Route::post('/test', [TestController::class, 'store']);
 
 Route::prefix("/user")->middleware(['auth:sanctum'])->group(function () {
