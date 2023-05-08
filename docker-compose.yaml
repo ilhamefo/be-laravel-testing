@@ -1,0 +1,87 @@
+version: '3'
+services:
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-test
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+    # command: composer install
+
+  # Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8099:80"
+      - "443:443"
+    volumes:
+     - ./:/var/www
+     - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - app-network
+
+  #MySQL Service
+  # db:
+  #   image: mysql:5.7.22
+  #   container_name: db
+  #   restart: unless-stopped
+  #   tty: true
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_USER: ilhamefo
+  #     MYSQL_PASSWORD: ${DB_PASSWORD}
+  #     MYSQL_DATABASE: ${DB_DATABASE}
+  #     MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+  #     SERVICE_TAGS: dev
+  #     SERVICE_NAME: mysql
+  #   # volumes:
+  #   #   - dbdata:/var/lib/mysql
+  #   #   - ./mysql/my.cnf:/etc/mysql/my.cnf
+  #   networks:
+  #     - app-network
+  postgres:
+    image: postgres:14.6-alpine
+    container_name: postgres_db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ilhamefo
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - 5430:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+    
+
+#Docker Networks
+volumes:
+  dbdata:
+    driver: local
+  pgdata:
+    driver: local
+networks:
+  app-network:
+    driver: bridge
