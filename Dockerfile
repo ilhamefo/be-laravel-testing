@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.2-fpm
 
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
@@ -73,7 +73,7 @@ RUN php artisan view:cache
 RUN php artisan optimize
 
 RUN php artisan storage:link
-# RUN touch .env
+
 RUN php artisan key:generate
 
 # Expose port 9000 and start php-fpm server

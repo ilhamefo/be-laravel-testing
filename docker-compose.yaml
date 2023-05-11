@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 services:
   #PHP Service
   app:
@@ -16,9 +16,7 @@ services:
     volumes:
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
-      - app-network
-    # command: composer install
-
+      - efo_networks
   # Nginx Service
   webserver:
     image: nginx:alpine
@@ -28,34 +26,17 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "8011:8011"
+      - "4099:4099"
     volumes:
      - ./:/var/www
      - ./nginx/conf.d/:/etc/nginx/conf.d/
     networks:
-      - app-network
-
-  #MySQL Service
-  # db:
-  #   image: mysql:5.7.22
-  #   container_name: db
-  #   restart: unless-stopped
-  #   tty: true
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "3306:3306"
-  #   environment:
-  #     MYSQL_USER: ilhamefo
-  #     MYSQL_PASSWORD: ${DB_PASSWORD}
-  #     MYSQL_DATABASE: ${DB_DATABASE}
-  #     MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-  #     SERVICE_TAGS: dev
-  #     SERVICE_NAME: mysql
-  #   # volumes:
-  #   #   - dbdata:/var/lib/mysql
-  #   #   - ./mysql/my.cnf:/etc/mysql/my.cnf
-  #   networks:
-  #     - app-network
+      efo_networks:
+        aliases:
+          - service_web
+    command: [nginx-debug, '-g', 'daemon off;']
+  # POSTGRES CONTAINER
   postgres:
     image: postgres:14.6-alpine
     container_name: postgres_db
@@ -71,10 +52,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - app-network
-
-    
-
+      - efo_networks
 #Docker Networks
 volumes:
   dbdata:
@@ -82,5 +60,6 @@ volumes:
   pgdata:
     driver: local
 networks:
-  app-network:
-    driver: bridge
+  efo_networks:
+    name: efo_networks
+    external: true

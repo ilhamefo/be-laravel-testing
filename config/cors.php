@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:3080', 'http://172.16.1.53:3080', 'http://localhost:3000', 'http://localhost:3123', 'http://localhost:2999', 'http://localhost:80', 'http://localhost', 'http://127.0.0.1:3000'],
+    'allowed_origins' => explode(',', env('ALLOWED_CORS_DOMAIN')),
 
     'allowed_origins_patterns' => [],
 
