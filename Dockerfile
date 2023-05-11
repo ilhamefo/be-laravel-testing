@@ -64,6 +64,8 @@ USER www
 
 RUN composer install --optimize-autoloader --no-dev
 
+RUN php artisan key:generate
+
 RUN php artisan config:cache
 
 RUN php artisan route:cache
@@ -74,7 +76,6 @@ RUN php artisan optimize
 
 RUN php artisan storage:link
 
-RUN php artisan key:generate
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
