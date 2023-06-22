@@ -8,19 +8,17 @@ on:
     branches:
       - main
   workflow_dispatch:
-
 jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: hello world
-        run: echo "Hello World1"
+        run: echo "Hello World12"
         shell: bash
-  
   goodbye:
     runs-on: ubuntu-latest
     steps:
       - name: goodbye world
-        run: echo "goodbye world1"
+        run: echo "goodbye world12"
         shell: bash
