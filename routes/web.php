@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserDocumentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,3 +19,13 @@ Route::get('/', function(){
         "Hello" => "World"
     ]);
 });
+
+Route::get('/email', function(){
+    return view('emails.orders.test', ['name' => 'Efo']);
+});
+
+Route::get('/php-version', function(){
+    return phpinfo();
+});
+
+Route::get('/pdf', [UserDocumentController::class, 'web']);

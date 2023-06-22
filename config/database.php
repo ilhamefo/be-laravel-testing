@@ -34,7 +34,17 @@ return [
     */
 
     'connections' => [
-
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'host' => env('MONGO_DB_HOST', '127.0.0.1'),
+            'port' => env('MONGO_DB_PORT', 27017),
+            'database' => env('MONGO_DB_DATABASE', 'homestead'),
+            'username' => env('MONGO_DB_USERNAME', 'homestead'),
+            'password' => env('MONGO_DB_PASSWORD', 'secret'),
+            'options' => [
+                'appname' => 'homestead',
+            ],
+        ],
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
@@ -46,12 +56,12 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
+            'host' => env('DB_MYSQL_HOST', '127.0.0.1'),
+            'port' => env('DB_MYSQL_PORT', '3306'),
+            'database' => env('DB_MYSQL_DATABASE', 'forge'),
+            'username' => env('DB_MYSQL_USERNAME', 'forge'),
+            'password' => env('DB_MYSQL_PASSWORD', ''),
+            'unix_socket' => env('DB_MYSQL_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
@@ -71,6 +81,21 @@ return [
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'pgsql_testing' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_TEST_HOST', '127.0.0.1'),
+            'port' => env('DB_TEST_PORT', '5432'),
+            'database' => env('DB_TEST_DATABASE', 'forge'),
+            'username' => env('DB_TEST_USERNAME', 'forge'),
+            'password' => env('DB_TEST_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
@@ -141,6 +166,11 @@ return [
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
+
+        'driver' => 'redis',
+        'connection' => 'default',
+        'queue' => '{default}',
+        'retry_after' => 90,
 
     ],
 

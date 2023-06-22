@@ -14,8 +14,7 @@ class AddCollumnForHomeAddressUsers extends Migration
     public function up()
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->text('address')->nullable();
-            $table->text('subdistrict')->nullable();
+            // $table->text('address')->nullable();
         });
     }
 
@@ -27,7 +26,7 @@ class AddCollumnForHomeAddressUsers extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['update_phone_at', 'subdistrict']);
+            // $table->dropColumn(['address']);
         });
     }
 }

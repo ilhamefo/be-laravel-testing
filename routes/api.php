@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\JobTitleController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OccupationController;
 use App\Http\Controllers\SourceOfFundController;
+use App\Http\Controllers\UserDocumentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,13 +30,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'authenticate']);
 
-Route::get('/', function(){
+Route::get('/', function () {
     return response()->json([
         "Hello" => "World"
     ]);
 });
 
-Route::post('/test', [TestController::class, 'store']);
+Route::post('/test/{id}', [UserController::class, 'testmail']);
+Route::post('/import', [UserController::class, 'import']);
+Route::get('/logo.jpg', [UserController::class, 'getLogo']);
+Route::get('/pdf', [UserDocumentController::class, 'generatePDF']);
 
 Route::prefix("/user")->middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [UserController::class, 'index']);
@@ -45,6 +50,16 @@ Route::prefix("/user")->middleware(['auth:sanctum'])->group(function () {
     Route::get('/search-subdistrict/{keyword}', [UserController::class, 'searchSubdistrict']);
     Route::get('/subdistrict/{id}', [UserController::class, 'searchSubdistrictByID']);
 
+    Route::post('/upload', [UserDocumentController::class, 'create']);
+    Route::post('/generate-pdf', [UserDocumentController::class, 'generatePDF']);
+
+    Route::prefix("/cart")->group(function () {
+        Route::post('/checkout', [CartController::class, 'checkout']);
+        Route::post('/', [CartController::class, 'create']);
+        Route::get('/', [CartController::class, 'index']);
+        Route::delete('/', [CartController::class, 'delete']);
+        Route::put('/', [CartController::class, 'update']);
+    });
 });
 
 Route::prefix("/")->middleware(['auth:sanctum'])->group(function () {

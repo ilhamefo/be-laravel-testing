@@ -14,7 +14,7 @@ class ChangeSubdistrictIdUsers extends Migration
     public function up()
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->uuid('subdistrict')->nullable();
+            // $table->uuid('subdistrict')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class ChangeSubdistrictIdUsers extends Migration
     public function down()
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->text('subdistrict')->nullable();
+            // $table->text('subdistrict')->nullable();
         });
     }
 }

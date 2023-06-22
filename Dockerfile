@@ -76,6 +76,7 @@ RUN php artisan optimize
 
 RUN php artisan storage:link
 
+RUN php artisan test --filter CartsTest
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

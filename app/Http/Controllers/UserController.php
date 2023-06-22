@@ -3,13 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Imports\UsersImport;
+use App\Jobs\SecondJob;
+use App\Jobs\SendTestEmail;
+use App\Mail\TestMailables;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\isNull;
 
@@ -323,5 +332,68 @@ class UserController extends Controller
                 "message" => $th->getMessage()
             ]);
         }
+    }
+
+    public function testmail($id)
+    {
+        try {
+            Bus::chain([
+                // here you can do Job Chaining
+                function () use ($id) {
+                    SendTestEmail::dispatch($id);
+                    SecondJob::dispatch($id);
+                }
+            ])->dispatch();
+
+            return response()->json([
+                "status" => true,
+                "data" => "email_queued"
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => false,
+                "message" => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function import()
+    {
+        // Excel::import(new UsersImport, 'users.xlsx');
+        try {
+            Excel::import(new UsersImport, 'users.xlsx');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+
+            foreach ($failures as $failure) {
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }
+            return response()->json($failures);
+        }
+    }
+
+    public function getLogo()
+    {
+        $file_path = 'cdn/404.jpg';
+
+        if (Storage::disk('s3')->exists($file_path)) {
+            $file =  Storage::disk('s3')->get($file_path);
+
+            $headers = [
+                'Content-Type' => 'image/jpg',
+                'filename' => '404.jpg'
+            ];
+
+            header_remove("X-Powered-By");
+            
+            return response($file, 200, $headers);
+        }
+    }
+
+    public function generateAndSendPDF(){
+        
     }
 }

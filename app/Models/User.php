@@ -6,12 +6,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Jenssegers\Mongodb\Eloquent\HybridRelations;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HybridRelations;
 
+    protected $connection = "pgsql";
     /**
      * The attributes that are mass assignable.
      *
@@ -28,7 +30,15 @@ class User extends Authenticatable
         'update_home_address_at',
         'update_employment_at',
         'update_additional_information_at',
-        'birth_date', 'birth_place', 'nik', 'npwp', 'mother_name', 'update_employment_at', 'gender', 'address', 'subdistrict',
+        'birth_date',
+        'birth_place',
+        'nik',
+        'npwp',
+        'mother_name',
+        'update_employment_at',
+        'gender',
+        'address',
+        'subdistrict',
         'company_address',
         'company_name',
         'company_subdistrict',
@@ -38,6 +48,7 @@ class User extends Authenticatable
         'occupation_id',
         'source_of_fund_free_text',
         'source_of_fund_id',
+        'email_verified_at'
     ];
 
     /**
@@ -72,5 +83,15 @@ class User extends Authenticatable
     public function genderDetails()
     {
         return $this->hasOne(Gender::class, "id", "gender");
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'user_id', 'id');
+    }
+
+    public function docs()
+    {
+        return $this->hasMany(UserDocument::class);
     }
 }
