@@ -64,8 +64,11 @@ jobs:
         run: |
             php artisan key:generate
 
-      - name: Clear Config
-        run: php artisan config:clear
+      - name: Print .env file
+        run: cat .env
+        shell: bash
+    #   - name: Clear Config
+    #     run: php artisan config:clear
 
       - name: Test with phpunit
         run: php artisan test --filter CartsTest --coverage-text --coverage-html test_output
