@@ -20,8 +20,8 @@ jobs:
         image: postgres:14.6-alpine
         env:
           POSTGRES_USER: ilhamefo
-          POSTGRES_DB: test_laravel
-          POSTGRES_PASSWORD: password123
+          POSTGRES_DB: ${DB_DATABASE}
+          POSTGRES_PASSWORD: ${DB_PASSWORD}
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -72,11 +72,11 @@ jobs:
 
       - name: Test with phpunit
         env:
-          DB_PASSWORD: password123
+          DB_PASSWORD: ${DB_PASSWORD}
           DB_HOST: 127.0.0.1
           DB_CONNECTION: pgsql
           DB_PORT: 5432
           DB_USERNAME: ilhamefo
-          DB_DATABASE: test_laravel
+          DB_DATABASE: ${DB_DATABASE}
         run: php artisan test --filter CartsTest --coverage-text --coverage-html test_output
         
