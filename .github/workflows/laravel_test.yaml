@@ -14,7 +14,7 @@ jobs:
 #       - name: log matrix
 #         run: echo '${{ toJSON(matrix) }}' | jq
   build-app:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:14.6-alpine
