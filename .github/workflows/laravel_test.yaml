@@ -56,10 +56,18 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Prepare the application
+      - name: Prepare env file
         run: |
           php -r "file_exists('.env') || copy('.env.example', '.env');"
-          php artisan key:generate
+
+      - name: fill environment file
+        run: |
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
+      - name: Prepare the application key
+        run: |
+            php artisan key:generate
 
       - name: Clear Config
         run: php artisan config:clear
