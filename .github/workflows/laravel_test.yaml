@@ -8,15 +8,15 @@ env:
   DB_DATABASE: ${{ secrets.DB_DATABASE }}
 
 jobs:
-#   log-matrix:
-#     runs-on: self-hosted
-#     steps:
-#       - name: log matrix
-#         run: echo '${{ toJSON(matrix) }}' | jq
+  #   log-matrix:
+  #     runs-on: self-hosted
+  #     steps:
+  #       - name: log matrix
+  #         run: echo '${{ toJSON(matrix) }}' | jq
   build-app:
     runs-on: ubuntu-latest
     services:
-      postgres:
+      postgres_services:
         image: postgres:14.6-alpine
         env:
           POSTGRES_USER: ilhamefo
@@ -62,13 +62,21 @@ jobs:
 
       - name: Prepare the application key
         run: |
-            php artisan key:generate
+          php artisan key:generate
 
       - name: Print .env file
         run: cat .env
         shell: bash
-    #   - name: Clear Config
-    #     run: php artisan config:clear
+      #   - name: Clear Config
+      #     run: php artisan config:clear
 
       - name: Test with phpunit
+        env:
+          DB_PASSWORD: password123
+          DB_HOST: postgres_services
+          DB_CONNECTION: pgsql
+          DB_PORT: 5432
+          DB_USERNAME: ilhamefo
+          DB_DATABASE: test_laravel
         run: php artisan test --filter CartsTest --coverage-text --coverage-html test_output
+        
