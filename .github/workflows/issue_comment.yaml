@@ -33,5 +33,5 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}"\
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          ${{ github.event.issue.comments_url }} \
+          "${{ github.event.issue.comments_url }}" \
           -d '{"body":"Test Comment from api"}'
