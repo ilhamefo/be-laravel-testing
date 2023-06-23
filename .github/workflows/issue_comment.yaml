@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Create comment with api
         run: |
-          curl -L \
+          echo '${{ secrets.PAT_TOKEN }}' && curl -L \
           -X POST \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${PAT_TOKEN}"\
