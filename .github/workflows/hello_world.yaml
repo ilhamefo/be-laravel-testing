@@ -9,15 +9,27 @@ on:
       - master
   workflow_dispatch:
 jobs:
+  # build:
+  #   runs-on: self-hosted
+  #   services:
+  #     postgres:
+  #         image: postgres:14
+  #         env:
+  #           POSTGRES_USER: efo
+  #           POSTGRES_PASSWORD: test
+  #           POSTGRES_DB: test123
+  #         ports:
+  #           - 5432:5432
+  #         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
   hello:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: hello world
         run: echo "Hello World12"
         shell: bash
   goodbye:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: goodbye world
         run: echo "goodbye world12"
