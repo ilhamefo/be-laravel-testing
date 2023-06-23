@@ -68,4 +68,4 @@ jobs:
         run: php artisan config:clear
 
       - name: Test with phpunit
-        run: vendor/bin/phpunit --filter CartsTest --coverage-text --coverage-html test_output
+        run: php artisan test --filter CartsTest --coverage-text --coverage-html test_output
