@@ -73,7 +73,7 @@ jobs:
       - name: Test with phpunit
         env:
           DB_PASSWORD: password123
-          DB_HOST: postgres_services
+          DB_HOST: 127.0.0.1
           DB_CONNECTION: pgsql
           DB_PORT: 5432
           DB_USERNAME: ilhamefo
