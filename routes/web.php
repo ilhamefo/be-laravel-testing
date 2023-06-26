@@ -20,6 +20,12 @@ Route::get('/', function(){
     ]);
 });
 
+Route::get('/hello-world', function(){
+    return response()->json([
+        "Hello" => "World"
+    ]);
+});
+
 Route::get('/email', function(){
     return view('emails.orders.test', ['name' => 'Efo']);
 });
